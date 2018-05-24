@@ -19,6 +19,35 @@
 <script>
     var canvas = document.getElementById("myCanvas");
     var ctx = canvas.getContext("2d");
+
+    var dx = 2;
+    var dy = -2;
+
+    var derechaPresionada = false;
+    var izquierdaPresionada = false;
+
+    document.addEventListener("keydown", keyDownHandler, false);
+    document.addEventListener("keyup", keyUpHandler, false);
+
+    function keyDownHandler(e) {
+        if(e.keyCode == 39){
+            derechaPresionada = true;
+        }
+        else if(e.keyCode == 37){
+            izquierdaPresionada = true;
+        }
+    }
+
+    function keyUpHandler(e) {
+        if(e.keyCode == 39){
+            derechaPresionada = false;
+        }
+        else if(e.keyCode == 37){
+            izquierdaPresionada = false;
+        }
+    }
+
+
     //Barra - este seria nuestro objeto Barra.
     var barra = {
         ancho: 80,
@@ -84,6 +113,48 @@
     barra.dibujar();
 	bloques.init();
 	bloques.dibujar();
+
+    function dibujarJuego(){
+        ctx.clearRect(0,0, canvas.width, canvas.height);
+
+        if(bolita.y-bolita.radio<0){
+            dy = -dy;
+        }
+
+        if(bolita.y+bolita.radio > canvas.height){
+            dy = -dy;
+        }
+
+        if(bolita.x+bolita.radio > canvas.width){
+            dx = -dx;
+        }
+
+        if(bolita.x-bolita.radio < 0){
+            dx = -dx;
+        }
+
+        if(derechaPresionada && barra.x+barra.ancho < canvas.width){
+            barra.x += dx;
+        }
+
+        if(izquierdaPresionada && barra.x > 0){
+            barra.x += dx;
+        }
+
+
+
+        bolita.dibujar();
+        barra.dibujar();
+        bolita.x += dx;
+        bolita.y += dy;
+
+    }
+
+    setInterval(dibujarJuego, 15);
+
+
+
+
 </script>
 </body>
 </html>
